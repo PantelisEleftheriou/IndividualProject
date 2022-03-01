@@ -1,0 +1,49 @@
+--COURSES
+
+-- OUTPUT A LIST OF ALL COURSES
+SELECT * FROM privateschooldatabase.courses;
+
+-- OUTPUT A LIST OF ALL TRAINERS PER COURSE
+SELECT courses.title as 'TITLE', courses.stream as 'STREAM', courses.type 'TYPE', trainers.firstName as 'TRAINER FIRST NAME', trainers.lastName as 'TRAINER LAST NAME'
+FROM trainers,courses
+WHERE trainers.courseID = courses.id;
+
+-- OUTPUT A LIST OF ALL STUDENTS PER COURSE
+SELECT courses.title as 'TITLE', courses.stream as 'STREAM', courses.type 'TYPE', students.firstName as 'STUDENT FIRST NAME', students.lastName as 'STUDENT LAST NAME'
+FROM students,courses,studentswatchcourses
+WHERE (studentswatchcourses.coursesID = courses.id AND studentswatchcourses.studentsID = students.id);
+
+-- OUTPUT A LIST OF ALL ASSINGMENT PER COURSE
+SELECT assingments.title,  courses.stream 
+    FROM courses,assingments
+    WHERE assingments.courseID = courses.id  
+
+--STUDENTS
+
+-- OUTPUT A LIST OF ALL STUDENTS
+SELECT * FROM privateschooldatabase.students;
+
+-- OUTPUT STUDENTS WITH MORE THAN ONE COURSE
+SELECT students.lastName as 'STUDENT\'S LAST NAME', students.firstName as 'STUDENT\'S FIRST NAME', students.tuitionFees as 'TUITION FEES', 
+students.birthday as 'BIRTHDAY', COUNT(COURSES.id) as 'AMOUNT OF COURSES' 
+FROM students, studentswatchcourses, courses 
+WHERE studentswatchcourses.coursesID = courses.id AND studentswatchcourses.studentsID = students.id
+GROUP BY students.firstname
+HAVING COUNT(COURSES.id)>=2
+ORDER BY students.lastName;
+
+--ASSINGMENTS
+
+-- OUTPUT A LIST OF ALL ASSINGMENTS
+SELECT * FROM privateschooldatabase.assingments;
+--OUTPUT A LIST OF ALL ASSINGMENTS PER STUDENT PER COURSE
+SELECT assingments.title, students.firstName, courses.stream 
+    FROM courses,assingments, students,studentswatchcourses
+    WHERE assingments.courseID = courses.id 
+    AND studentswatchcourses.studentsID = students.id AND studentswatchcourses.coursesID = courses.id;
+ 
+
+--TRAINERS
+
+-- OUTPUT A LIST OF ALL TRAINERS
+SELECT * FROM privateschooldatabase.trainers;
